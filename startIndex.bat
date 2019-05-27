@@ -1,1 +1,1 @@
-node index.js
+yarn nodemon
