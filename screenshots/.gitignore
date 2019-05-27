@@ -1,0 +1,5 @@
+#this file is needed to keep track of the screenshots folder but not its content
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore

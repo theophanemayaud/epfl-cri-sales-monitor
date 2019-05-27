@@ -1,0 +1,16 @@
+{
+  "cisco_ids": {
+    "server": "vpn.epfl.ch",
+    "username": "",
+    "password": ""
+  },
+  "mail_account": {
+    "from": "",
+    "to": "",
+    "user": "",
+    "pass": ""
+  },
+  "epfl_pswd": "",
+  "epfl_user": "",
+  "machine_user_pswd": ""
+}
