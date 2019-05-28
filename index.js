@@ -277,13 +277,7 @@ const gitPull = async () => {
   setTimeout(gitPull, gitPullInterval);
 };
 
-const startProgram = async () => {
-  console.log("Bienvenue my friend !!!".bgGreen);
-  mailProgramStart();
-  gitPull();
-  console.log(
-    "Setting " + gitPullInterval / 60000 + " minutes timer for next git pull"
-  );
+const connectVPN = () => {
   try {
     console.log("Will connect to VPN".italic);
     cmd.get(
@@ -310,24 +304,15 @@ const startProgram = async () => {
       }
     );
     /*  for windows cisco openconnect only
-    await vpn.connect();
-    console.log("Cisco anyconnect connected successfully !");
-*/
+        await vpn.connect();
+        console.log("Cisco anyconnect connected successfully !");
+    */
   } catch (error) {
     console.log(colors.red("VPN errror : \n'%s'"), error);
   }
-
-  checkPage();
-
-  console.log(
-    "The fetches have started with " +
-      Math.floor(fetchesTimeIntervals / 60000) +
-      "min time intervals"
-  );
 };
 
-const exitProgram = async () => {
-  console.log("Good Bye, exiting");
+const disconnectVPN = () => {
   try {
     /* sudo pkill -2 openconnect */
     cmd.get(
@@ -350,17 +335,42 @@ const exitProgram = async () => {
   } catch (error) {
     console.log("VPN disconnect error : " + error);
   }
+};
+
+const startProgram = async () => {
+  console.log("Bienvenue my friend !!!".bgGreen);
+  connectVPN();
+  mailProgramStart();
+  gitPull();
+  console.log(
+    "Setting " + gitPullInterval / 60000 + " minutes timer for next git pull"
+  );
+
+  checkPage();
+
+  console.log(
+    "The fetches have started with " +
+      Math.floor(fetchesTimeIntervals / 60000) +
+      "min time intervals"
+  );
+};
+
+const exitProgram = async () => {
+  console.log("Good Bye, exiting");
+  disconnectVPN();
   process.exit(0);
 };
 
 const startDay = () => {
   console.log("Start of day, fetches will start !".bgMagenta);
   keepFetching = true;
+  connectVPN();
   checkPage();
 };
 const stopDay = () => {
   console.log("End of day, fetches will stop !".bgMagenta);
   keepFetching = false;
+  disconnectVPN();
 };
 // ====================================== execution ======================================
 // ==================================================================================
