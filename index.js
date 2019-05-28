@@ -420,6 +420,14 @@ stdin.addListener("data", function(d) {
       console.log("Will pull from git");
       gitPull();
       break;
+    case "vpnd":
+      console.log("Will disconnect VPN");
+      disconnectVPN();
+      break;
+    case "vpnc":
+      console.log("Will connect VPN");
+      connectVPN();
+      break;
     case "stop":
       console.log("Stopping page fetches");
       keepFetching = false;
@@ -427,7 +435,9 @@ stdin.addListener("data", function(d) {
     default:
       console.log("you entered: [" + d.toString().trim() + "]");
       console.log("It doesn't match any of the standard, following commands :");
-      console.log("exit (program), start (fetches), stop (fetches)");
+      console.log(
+        "exit (program), start (fetches), stop (fetches), \n vpnd (disconnect VPN), vpnc (connect VPN)"
+      );
       break;
   }
 });
