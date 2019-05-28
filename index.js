@@ -272,7 +272,10 @@ const gitPull = async () => {
       }
     );
   } catch (error) {
-    console.log(" There was an error in gitPull function : ".red + error);
+    console.log(
+      colors.red(" There was an error in gitPull function : %s"),
+      error
+    );
   }
   setTimeout(gitPull, gitPullInterval);
 };
@@ -326,14 +329,14 @@ const disconnectVPN = () => {
         if (!err) {
           console.log("openconnect said : ", data);
         } else {
-          console.log("openconnect error :", err);
+          console.log(colors.red("openconnect error : %s"), err);
         }
       }
     );
     //await vpn.disconnect();
     console.log("VPN disconnected successfully");
   } catch (error) {
-    console.log("VPN disconnect error : " + error);
+    console.log(colors.red("VPN disconnect error : %s"), error);
   }
 };
 
