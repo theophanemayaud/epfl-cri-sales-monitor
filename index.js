@@ -2,6 +2,8 @@
 const puppeteer = require("puppeteer");
 const nodemailer = require("nodemailer");
 
+const schedule = require("node-schedule");
+
 const pixelmatch = require("pixelmatch");
 const date = require("date-and-time");
 
@@ -351,8 +353,43 @@ const exitProgram = async () => {
   process.exit(0);
 };
 
+const startDay = () => {
+  console.log("Start of day, fetches will start !".bgMagenta);
+  keepFetching = true;
+  checkPage();
+};
+const stopDay = () => {
+  console.log("End of day, fetches will stop !".bgMagenta);
+  keepFetching = false;
+};
 // ====================================== execution ======================================
 // ==================================================================================
+/*
+Cron-style Scheduling for node-schedule
+The cron format consists of:
+
+*    *    *    *    *    *
+┬    ┬    ┬    ┬    ┬    ┬
+│    │    │    │    │    │
+│    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+│    │    │    │    └───── month (1 - 12)
+│    │    │    └────────── day of month (1 - 31)
+│    │    └─────────────── hour (0 - 23)
+│    └──────────────────── minute (0 - 59)
+└───────────────────────── second (0 - 59, OPTIONAL)
+*/
+var startJob = schedule.scheduleJob("0 7 * * *", startDay);
+
+var stopJob = schedule.scheduleJob("00 20 * * *", stopDay);
+
+console.log(
+  colors.yellow("News start job will be at : %s"),
+  startJob.nextInvocation()
+);
+console.log(
+  colors.yellow("News stop job will be at : %s"),
+  stopJob.nextInvocation()
+);
 
 startProgram();
 
