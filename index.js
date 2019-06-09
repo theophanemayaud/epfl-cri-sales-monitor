@@ -1,3 +1,20 @@
+/* Instructions for use
+--- Preparations ---
+In order to get this script working, please fill in your credentials in private.json.example
+    then rename it to private.json
+
+Also, depending on whether you are on mac, debian, or another platform, you will need a 
+    reference image for when there is nothing new on the cri website. For this, either rename 
+    one of the existing reference images to nothingNewReference.png or if none match your platform
+    (or if the script gives a flase positive when you have chosen one) define one arbitrarily, 
+    then run the script and take the latest screenshot where there are no items
+    from the screenshots folder, and replace nothingNewReference.png with it. At this point,
+    the script should not do any false positives (detect pixel differences when actually there are 
+    no new items) !
+ --- Running the script ---
+ start the script with yarn start
+*/
+
 // ====================================== requires ======================================
 const puppeteer = require("puppeteer");
 const nodemailer = require("nodemailer");
