@@ -34,7 +34,7 @@ const private = require("./private.json");
 
 // ====================================== vars ======================================
 // ==================================================================================
-const gitPullInterval = 60 * 1000 * 5;
+const autoUpdateInterval = 60 * 1000 * 5;
 var stdin = process.openStdin();
 let keepFetching = true;
 const maxFetchesInterval = 60 * 1000 * 5;
@@ -64,6 +64,10 @@ let noItemsScreenshotComparePath = "nothingNewReference.png";
 let lastScreenShotPath = noItemsScreenshotComparePath;
 let mailText = " There are new items !!!";
 let currentScreenShotPath = noItemsScreenshotComparePath;
+
+//========= end vars =====
+
+// ===== used sub functions ===
 
 function readPngPromise(filePath) {
   return new Promise((resolve, reject) => {
@@ -211,7 +215,11 @@ const checkPage = async () => {
       );
     }
   } catch (error) {
-    console.log(colors.red("%s TM Error : '%s' "), criPageId, error);
+    console.log(
+      colors.red("Id : %s - CheckPage general try error : '%s' "),
+      criPageId,
+      error
+    );
   }
   await browser.close();
   criPageId++;
@@ -229,7 +237,7 @@ const checkPage = async () => {
 };
 
 const mailProgramStart = async () => {
-  console.log("Will send program started mail".bgYellow);
+  console.log("Will send program started mail".italic);
   await transporter.sendMail(
     {
       from: private.mail_account.from,
@@ -239,13 +247,16 @@ const mailProgramStart = async () => {
     },
     (error, info) => {
       if (error) {
-        console.log("There was an error sending start mail".red);
-        console.log(error);
+        console.log(
+          colors.red("There was an error sending start mail, error is : \n %s"),
+          error
+        );
       } else {
-        console.log("Start mail sent successfully !!!");
+        console.log("Start mail sent successfully !!!".green);
       }
     }
   );
+  return;
 };
 
 const mailNewItemsPhoto = async (trialId, message, photoPath) => {
@@ -274,6 +285,13 @@ const mailNewItemsPhoto = async (trialId, message, photoPath) => {
   sendMail = false;
 };
 
+const autoUpdateScriptGithub = async () => {
+  await gitPull();
+  await updatePackageDeps();
+  setTimeout(autoUpdateScriptGithub, autoUpdateInterval);
+  return;
+};
+
 const gitPull = async () => {
   try {
     cmd.get(
@@ -294,16 +312,31 @@ const gitPull = async () => {
       error
     );
   }
-  setTimeout(gitPull, gitPullInterval);
 };
 
-const connectVPN = () => {
+const updatePackageDeps = () => {
+  try {
+    console.log("Will update package deps");
+    cmd.get(`yarn`, function(err, data, stderr) {
+      if (!err) {
+        console.log(
+          colors.green("Package deps update worked saying : %s"),
+          data
+        );
+      } else {
+        console.log(colors.red("Package deps update error : %s"), err);
+      }
+    });
+  } catch (error) {
+    console.log(colors.red("Package deps update problem : \n'%s'"), error);
+  }
+};
+
+const connectVPN = async () => {
   try {
     console.log("Will connect to VPN".italic);
     cmd.get(
-      `
-        yarn
-        echo ` +
+      `echo ` +
         private.machine_user_pswd +
         ` | sudo -S notacommand
         echo '` +
@@ -315,11 +348,15 @@ const connectVPN = () => {
       function(err, data, stderr) {
         if (!err) {
           console.log(
-            "VPN Openconnect connection established and said : ",
+            colors.green(
+              "VPN Openconnect connection established and said : %s"
+            ),
             data
           );
+          return;
         } else {
           console.log(colors.red("openconnect error : %s"), err);
+          return;
         }
       }
     );
@@ -329,12 +366,12 @@ const connectVPN = () => {
     */
   } catch (error) {
     console.log(colors.red("VPN errror : \n'%s'"), error);
+    return;
   }
 };
 
 const disconnectVPN = () => {
   try {
-    /* sudo pkill -2 openconnect */
     cmd.get(
       `
         echo ` +
@@ -344,35 +381,20 @@ const disconnectVPN = () => {
         `,
       function(err, data, stderr) {
         if (!err) {
-          console.log("openconnect said : ", data);
+          console.log(
+            colors.green("OpenConnect vpn stopped and said : %s"),
+            data
+          );
         } else {
           console.log(colors.red("openconnect error : %s"), err);
         }
       }
     );
-    //await vpn.disconnect();
+    //await vpn.disconnect(); // for windows only
     console.log("VPN disconnected successfully");
   } catch (error) {
     console.log(colors.red("VPN disconnect error : %s"), error);
   }
-};
-
-const startProgram = async () => {
-  console.log("Bienvenue my friend !!!".bgGreen);
-  connectVPN();
-  mailProgramStart();
-  gitPull();
-  console.log(
-    "Setting " + gitPullInterval / 60000 + " minutes timer for next git pull"
-  );
-
-  checkPage();
-
-  console.log(
-    "The fetches have started with " +
-      Math.floor(fetchesTimeIntervals / 60000) +
-      "min time intervals"
-  );
 };
 
 const exitProgram = async () => {
@@ -387,6 +409,7 @@ const startDay = () => {
   connectVPN();
   checkPage();
 };
+
 const stopDay = () => {
   console.log("End of day, fetches will stop !".bgMagenta);
   keepFetching = false;
@@ -412,15 +435,31 @@ var startJob = schedule.scheduleJob("0 7 * * *", startDay);
 
 var stopJob = schedule.scheduleJob("00 20 * * *", stopDay);
 
-console.log(
-  colors.yellow("News start job will be at : %s"),
-  startJob.nextInvocation()
-);
-console.log(
-  colors.yellow("News stop job will be at : %s"),
-  stopJob.nextInvocation()
-);
+const startProgram = async () => {
+  console.log("Bienvenue my friend !!!".bgGreen);
+  console.log(
+    colors.yellow("News start job will be at : %s"),
+    startJob.nextInvocation()
+  );
+  console.log(
+    colors.yellow("News stop job will be at : %s"),
+    stopJob.nextInvocation()
+  );
+  await connectVPN();
+  await mailProgramStart();
+  await autoUpdateScriptGithub();
+  console.log(
+    "Setting " + autoUpdateInterval / 60000 + " minutes timer for next git pull"
+  );
 
+  checkPage();
+
+  console.log(
+    "The fetches have started with " +
+      Math.floor(fetchesTimeIntervals / 60000) +
+      "min time intervals"
+  );
+};
 startProgram();
 
 stdin.addListener("data", function(d) {
@@ -438,7 +477,7 @@ stdin.addListener("data", function(d) {
       break;
     case "git":
       console.log("Will pull from git");
-      gitPull();
+      autoUpdateScriptGithub();
       break;
     case "vpnd":
       console.log("Will disconnect VPN");
