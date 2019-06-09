@@ -1,6 +1,7 @@
 #personnal folders
 private.json
 /diff.png
+/nothingNewReference.png
 
 #machine config files
 .DS_Store
