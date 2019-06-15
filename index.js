@@ -288,6 +288,12 @@ const mailNewItemsPhoto = async (trialId, message, photoPath) => {
 const autoUpdateScriptGithub = async () => {
   await gitPull();
   await updatePackageDeps();
+  console.log(
+    colors.italic(
+      "Setting %s minutes timer for next git script update from github"
+    ),
+    autoUpdateInterval / 60000
+  );
   setTimeout(autoUpdateScriptGithub, autoUpdateInterval);
   return;
 };
@@ -300,15 +306,15 @@ const gitPull = async () => {
         `,
       function(err, data, stderr) {
         if (!err) {
-          console.log("Git pull worked, git said : ".bgCyan, data);
+          console.log(colors.bgCyan("Git pull worked, git said : %s"), data);
         } else {
-          console.log("Git pull error :".bgRed, err);
+          console.log(colors.red("Git pull error : %s"), err);
         }
       }
     );
   } catch (error) {
     console.log(
-      colors.red(" There was an error in gitPull function : %s"),
+      colors.red("There was an error in gitPull function : %s"),
       error
     );
   }
@@ -336,7 +342,8 @@ const connectVPN = async () => {
   try {
     console.log("Will connect to VPN".italic);
     cmd.get(
-      `echo ` +
+      `
+      echo ` +
         private.machine_user_pswd +
         ` | sudo -S notacommand
         echo '` +
@@ -353,10 +360,8 @@ const connectVPN = async () => {
             ),
             data
           );
-          return;
         } else {
           console.log(colors.red("openconnect error : %s"), err);
-          return;
         }
       }
     );
@@ -366,7 +371,6 @@ const connectVPN = async () => {
     */
   } catch (error) {
     console.log(colors.red("VPN errror : \n'%s'"), error);
-    return;
   }
 };
 
@@ -438,19 +442,16 @@ var stopJob = schedule.scheduleJob("00 20 * * *", stopDay);
 const startProgram = async () => {
   console.log("Bienvenue my friend !!!".bgGreen);
   console.log(
-    colors.yellow("News start job will be at : %s"),
+    colors.yellow("New start job will be at : %s"),
     startJob.nextInvocation()
   );
   console.log(
-    colors.yellow("News stop job will be at : %s"),
+    colors.yellow("New stop job will be at : %s"),
     stopJob.nextInvocation()
   );
   await connectVPN();
   await mailProgramStart();
   await autoUpdateScriptGithub();
-  console.log(
-    "Setting " + autoUpdateInterval / 60000 + " minutes timer for next git pull"
-  );
 
   checkPage();
 
