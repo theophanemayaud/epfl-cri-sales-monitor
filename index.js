@@ -369,7 +369,7 @@ const connectVPN = async () => {
       echo ` +
         private.machine_user_pswd +
         ` | sudo -S notacommand
-        
+
         echo '` +
         private.epfl_pswd +
         `' | sudo openconnect -b --no-dtls vpn.epfl.ch --user=` +
@@ -377,9 +377,10 @@ const connectVPN = async () => {
         ` --passwd-on-stdin`,
       function(err, data, stderr) {
         if (!err) {
+          // will return success only when openconnect process is killed !
           console.log(
-            colors.green(
-              "VPN Openconnect connection established and said : %s"
+            colors.bgRed(
+              "connectVPN return success (meaning VPN connection is closed) : %s"
             ),
             data
           );
