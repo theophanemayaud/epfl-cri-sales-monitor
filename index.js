@@ -479,8 +479,9 @@ stdin.addListener("data", function(d) {
       checkPage();
       break;
     case "git":
-      console.log("Will pull from git");
-      autoUpdateScriptGithub();
+      console.log("Will pull from git and updates packages");
+      gitPull();
+      updatePackageDeps();
       break;
     case "vpnd":
       console.log("Will disconnect VPN");
