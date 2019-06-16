@@ -328,7 +328,7 @@ const gitPull = async () => {
         `,
       function(err, data, stderr) {
         if (!err) {
-          console.log(colors.bgCyan("Git pull worked, git said : %s"), data);
+          console.log("Git pull worked, git said : ".bgCyan + data);
         } else {
           console.log(colors.red("Git pull error : %s"), err);
           resetInternetConnection();
