@@ -512,6 +512,12 @@ stdin.addListener("data", function(d) {
       console.log("Will connect VPN");
       connectVPN();
       break;
+    case "reseti":
+      resetInternetConnection();
+      break;
+    case "fetch":
+      checkPage();
+      break;
     case "stop":
       console.log("Stopping page fetches");
       keepFetching = false;
