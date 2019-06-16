@@ -1,2 +1,2 @@
 "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" startvm "Debian" --type headless
-putty.exe -ssh username@localhost -pw mypassword -m "sshcommands.txt" -t
+putty.exe -ssh username@localhost -pw mypassword
