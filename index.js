@@ -363,7 +363,9 @@ const updatePackageDeps = () => {
 
 const connectVPN = async () => {
   try {
-    console.log("Will connect to VPN".italic);
+    console.log(
+      "Will connect to VPN, if no direct error than it is connected !".italic
+    );
     cmd.get(
       `
       echo ` +
