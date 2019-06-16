@@ -310,12 +310,12 @@ const resetInternetConnection = async () => {
           colors.green("Internet connection reset ok saying : %s"),
           data
         );
+        connectVPN();
       } else {
         console.log(colors.red("Internet connection error : %s"), err);
       }
     }
   );
-  connectVPN();
 };
 
 const gitPull = async () => {
