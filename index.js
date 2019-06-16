@@ -369,13 +369,12 @@ const connectVPN = async () => {
       echo ` +
         private.machine_user_pswd +
         ` | sudo -S notacommand
+        
         echo '` +
         private.epfl_pswd +
         `' | sudo openconnect -b --no-dtls vpn.epfl.ch --user=` +
         private.epfl_user +
-        ` --passwd-on-stdin
-        
-        `,
+        ` --passwd-on-stdin`,
       function(err, data, stderr) {
         if (!err) {
           console.log(
@@ -512,7 +511,6 @@ stdin.addListener("data", function(d) {
       disconnectVPN();
       break;
     case "vpnc":
-      console.log("Will connect VPN");
       connectVPN();
       break;
     case "reseti":
