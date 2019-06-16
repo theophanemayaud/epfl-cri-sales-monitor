@@ -374,6 +374,7 @@ const connectVPN = async () => {
         `' | sudo openconnect -b --no-dtls vpn.epfl.ch --user=` +
         private.epfl_user +
         ` --passwd-on-stdin
+        
         `,
       function(err, data, stderr) {
         if (!err) {
@@ -500,8 +501,10 @@ stdin.addListener("data", function(d) {
       checkPage();
       break;
     case "git":
-      console.log("Will pull from git and updates packages");
+      console.log("Will pull from git");
       gitPull();
+      break;
+    case "upack":
       updatePackageDeps();
       break;
     case "vpnd":
@@ -526,7 +529,10 @@ stdin.addListener("data", function(d) {
       console.log("you entered: [" + d.toString().trim() + "]");
       console.log("It doesn't match any of the standard, following commands :");
       console.log(
-        "exit (program), start (fetches), stop (fetches), \n vpnd (disconnect VPN), vpnc (connect VPN)"
+        "exit (program), start (fetches), stop (fetches), \n " +
+          "vpnd (disconnect VPN), vpnc (connect VPN) \n" +
+          "upack (update packages with yarn start), fetch (fetch one page)\n" +
+          "git (pull from github), reseti (reset internet connection) \n"
       );
       break;
   }
