@@ -381,7 +381,7 @@ const connectVPN = async () => {
         if (!err) {
           // will return success only when openconnect process is killed !
           console.log(
-            colors.bgRed(
+            colors.bgBlue(
               "connectVPN return success (meaning VPN connection is closed) : %s"
             ),
             data
@@ -439,7 +439,7 @@ const startDay = () => {
   console.log("Start of day, fetches will start !".bgMagenta);
   keepFetching = true;
   connectVPN();
-  setTimeout(checkPage(), 10000);
+  setTimeout(checkPage(), 5000); //wait till vpn connected
 };
 
 const stopDay = () => {
