@@ -299,6 +299,7 @@ const autoUpdateScriptGithub = async () => {
 };
 
 const gitPull = async () => {
+  console.log(date.format(now, "YY MM DD - HH mm") + " - Will pull with git");
   try {
     cmd.get(
       `
