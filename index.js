@@ -439,7 +439,7 @@ const startDay = () => {
   console.log("Start of day, fetches will start !".bgMagenta);
   keepFetching = true;
   connectVPN();
-  checkPage();
+  setTimeout(checkPage(), 10000);
 };
 
 const stopDay = () => {
@@ -477,11 +477,11 @@ const startProgram = async () => {
     colors.yellow("New stop job will be at : %s"),
     stopJob.nextInvocation()
   );
-  await connectVPN();
-  await mailProgramStart();
-  await autoUpdateScriptGithub();
+  mailProgramStart();
+  setTimeout(autoUpdateScriptGithub, 5000); // wait till mail was sent
+  setTimeout(connectVPN, 7000);
 
-  checkPage();
+  setTimeout(checkPage, 10000); //wait till vpn connected !
 
   console.log(
     "The fetches have started with " +
