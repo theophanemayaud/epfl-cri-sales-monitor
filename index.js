@@ -412,7 +412,9 @@ const disconnectVPN = () => {
       function(err, data, stderr) {
         if (!err) {
           console.log(
-            colors.green("OpenConnect vpn stopped and said : %s"),
+            colors.green(
+              "OpenConnect vpn stopped and said : %s \n---end to what it said---"
+            ),
             data
           );
         } else {
@@ -421,7 +423,7 @@ const disconnectVPN = () => {
       }
     );
     //await vpn.disconnect(); // for windows only
-    console.log("VPN disconnected successfully");
+    console.log("VPN disconnected successfully".green);
   } catch (error) {
     console.log(colors.red("VPN disconnect error : %s"), error);
   }
@@ -510,7 +512,7 @@ stdin.addListener("data", function(d) {
       updatePackageDeps();
       break;
     case "vpnd":
-      console.log("Will disconnect VPN");
+      console.log("Will disconnect VPN".italic);
       disconnectVPN();
       break;
     case "vpnc":
