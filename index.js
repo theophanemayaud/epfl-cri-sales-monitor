@@ -311,6 +311,22 @@ const gitPull = async () => {
           console.log(colors.bgCyan("Git pull worked, git said : %s"), data);
         } else {
           console.log(colors.red("Git pull error : %s"), err);
+          console.log("Will try to reset internet connection");
+          cmd.get(
+            `
+            sudo /etc/init.d/networking restart
+            `,
+            function(err, data, stderr) {
+              if (!err) {
+                console.log(
+                  colors.green("Internet connection reset ok saying : %s"),
+                  data
+                );
+              } else {
+                console.log(colors.red("Internet connection error : %s"), err);
+              }
+            }
+          );
         }
       }
     );
