@@ -477,17 +477,18 @@ const startProgram = async () => {
     colors.yellow("New stop job will be at : %s"),
     stopJob.nextInvocation()
   );
+  console.log(
+    colors.yellow(
+      "The program will start with %s min time intervals for page fetches"
+    ),
+    Math.floor(fetchesTimeIntervals / 60000)
+  );
+
   mailProgramStart();
   setTimeout(autoUpdateScriptGithub, 5000); // wait till mail was sent
   setTimeout(connectVPN, 7000);
 
   setTimeout(checkPage, 10000); //wait till vpn connected !
-
-  console.log(
-    "The fetches have started with " +
-      Math.floor(fetchesTimeIntervals / 60000) +
-      "min time intervals"
-  );
 };
 startProgram();
 
