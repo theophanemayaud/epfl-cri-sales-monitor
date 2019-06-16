@@ -310,7 +310,7 @@ const resetInternetConnection = async () => {
           colors.green("Internet connection reset ok saying : %s"),
           data
         );
-        connectVPN();
+        setTimeout(connectVPN, 10000);
       } else {
         console.log(colors.red("Internet connection error : %s"), err);
       }
