@@ -439,7 +439,7 @@ const startDay = () => {
   console.log("Start of day, fetches will start !".bgMagenta);
   keepFetching = true;
   connectVPN();
-  setTimeout(checkPage(), 5000); //wait till vpn connected
+  setTimeout(checkPage, 5000); //wait till vpn connected
 };
 
 const stopDay = () => {
