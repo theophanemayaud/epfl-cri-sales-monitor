@@ -34,7 +34,7 @@ const private = require("./private.json");
 
 // ====================================== vars ======================================
 // ==================================================================================
-const autoUpdateInterval = 60 * 1000 * 5;
+const autoUpdateInterval = 60 * 1000 * 2;
 var stdin = process.openStdin();
 let keepFetching = true;
 const maxFetchesInterval = 60 * 1000 * 5;
