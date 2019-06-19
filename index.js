@@ -299,7 +299,8 @@ const autoUpdateScriptGithub = async () => {
 };
 
 const resetInternetConnection = async () => {
-    console.log("Will try to reset internet connection");
+    console.log("Will try to reset internet connection, first disconnect VPN then reset internet than reconnect VPN");
+    disconnectVPN();
     cmd.get(
         `echo ` + private.machine_user_pswd + ` | sudo -S notacommand
         sudo /etc/init.d/networking restart
